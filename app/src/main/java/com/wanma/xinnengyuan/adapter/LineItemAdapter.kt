@@ -27,14 +27,14 @@ class LineItemAdapter(val context: Context, val list: ArrayList<LineListItem>, v
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 //        when(viewType) {
 //            Config.VIEW_SHOW -> {
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.adapter_list_image_item, parent, false)
-                val viewHolder = ViewHolder(view)
-                viewHolder.deleteBtn.setOnClickListener {
-                    val position = viewHolder.adapterPosition
-                    onRemoveListener.onRemove(position)
-                }
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.adapter_list_image_item, parent, false)
+        val viewHolder = ViewHolder(view)
+        viewHolder.deleteBtn.setOnClickListener {
+            val position = viewHolder.adapterPosition
+            onRemoveListener.onRemove(position)
+        }
 
-                return viewHolder
+        return viewHolder
 //            }
 //            Config.VIEW_NOT_SHOW -> {
 //                val view = LayoutInflater.from(parent.context).inflate(R.layout.adapter_not_show_item, parent, false)
@@ -52,27 +52,30 @@ class LineItemAdapter(val context: Context, val list: ArrayList<LineListItem>, v
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 //        if(holder.itemViewType == Config.VIEW_SHOW) {
-            val adapter = list[position].adapter
-            holder.et.setText(list[position].noStr)
-            PhotoViewUtil.initWidget(holder.recyclerView, context, adapter, 3)
+        val adapter = list[position].adapter
 
-            if(holder.et.tag is TextWatcher) {
-                holder.et.removeTextChangedListener(holder.et.tag as TextWatcher)
+        PhotoViewUtil.initWidget(holder.recyclerView, context, adapter, 3)
+
+        if(holder.et.tag is TextWatcher) {
+            holder.et.removeTextChangedListener(holder.et.tag as TextWatcher)
+        }
+
+        holder.et.setText(list[position].noStr)
+
+        val watch = object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {
+                list[position].noStr = p0.toString()
+
             }
-            val watch = object : TextWatcher {
-                override fun afterTextChanged(p0: Editable?) {
-                    list[position].noStr = p0.toString()
 
-                }
-
-                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                }
-
-                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                }
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
-            holder.et.addTextChangedListener(watch)
-            holder.et.tag = watch
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+        }
+        holder.et.addTextChangedListener(watch)
+        holder.et.tag = watch
 //        }
     }
 }
